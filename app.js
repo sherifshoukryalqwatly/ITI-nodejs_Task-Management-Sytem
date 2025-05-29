@@ -14,6 +14,7 @@ app.use(morgan("dev")); // log info about request
 app.use("/users", userRouter);
 app.use("/tasks", taskRouter);
 
-app.listen(8000, () => {
-  console.log(`listening to the server on port ${8000}`);
+const port = process.env.PORT;
+app.listen(port, () => {
+  console.log(`listening to the server on port ${port}`);
 });

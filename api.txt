@@ -1,0 +1,15 @@
+Action                      http method                    routes
+
+
+get tasks for user           get                           /task
+create task                  post                          /task
+update task                  patch                         /task
+delete all tasks             delete                        /task
+delete task by id            delete                        /task/:id
+get specfic task             get                           /task/:id
+
+
+login                       post                           users/login
+signup                      post                           users/signup
+
+
