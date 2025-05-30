@@ -1,67 +1,92 @@
 const Task = require("../models/taskModel");
 
-const getAllTasks = async (req, res)=> {
+const getAllUserTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
-    res.json(tasks);
+    const tasks = await Task.find({ userID: req.user._id });
+    res.json({
+      status: "success",
+      results: tasks.length,
+      data: tasks,
+    });
   } catch (error) {
-    res.json({error})
+    res.json({ error });
   }
 };
 
-const createTask = async (req, res)=> {
+const createTask = async (req, res) => {
   try {
-    const task = await Task.create(req.body);
-    res.json(task);
+    req.body.userID = req.user._id;
+    const newTask = await Task.create(req.body);
+    res.status(201).json({
+      status: "success",
+      data: newTask,
+    });
   } catch (error) {
-    res.json({error});
+    res.status(400).json({
+      status: "failed",
+      err,
+    });
   }
 };
 
-const updateTask =async (req, res)=> {
+const updateTask = async (req, res) => {
   try {
-    const {id} = req.params;
-    const task = await Task.findOneAndUpdate(id,req.body,{new:true,runValidators:true});
-    res.json(task);
+    const { id } = req.params;
+    console.log(id);
+    // const task = await Task.findOneAndUpdate(id, req.body, {
+    const task = await Task.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: "success",
+      task,
+    });
   } catch (error) {
-    res.json({error});
+    console.log(error);
+    res.json({ error });
   }
 };
 
-const deleteAllTasks = async (req, res)=> {
+const deleteAllTasks = async (req, res) => {
   try {
-    const data = await Task.deleteMany({});
-    res.json(data);
-    } catch (error) {
-    res.json({error});
+    await Task.deleteMany({ userID: req.user._id });
+    res.status(204).json({ status: "suceess" });
+  } catch (error) {
+    res.json({ error });
   }
 };
 
-const deleteOneTask = async (req, res)=> {
+const deleteOneTask = async (req, res) => {
   try {
-    const {id} = req.params;
-    const data = await Task.deleteOne({_id:id});
-    res.json(data);
+    const { id } = req.params;
+    const data = await Task.deleteOne({ _id: id });
+    res.status(204).json({
+      status: "success",
+    });
   } catch (error) {
-    res.json({error});
+    res.json({ error });
   }
 };
 
-const getTask = async (req, res)=> {
+const getTask = async (req, res) => {
   try {
-    const {id} = req.params;
-    const task = await Task.findOne({_id:id});
-    res.json(task);
+    const { id } = req.params;
+    const task = await Task.findOne({ _id: id });
+    res.status(200).json({
+      status: "success",
+      data: task,
+    });
   } catch (error) {
-    res.json({error});
+    res.json({ error });
   }
 };
 
 module.exports = {
-  getAllTasks,
+  getAllUserTasks,
   getTask,
   createTask,
   updateTask,
   deleteAllTasks,
-  deleteOneTask
-}
+  deleteOneTask,
+};

@@ -1,17 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const taskController = require("../controllers/taskController");
-
+const authController = require("../controllers/authController");
 router
   .route("/")
-  .get(taskController.getAllTasks)
-  .post(taskController.createTask)
-  .patch(taskController.updateTask)
-  .delete(taskController.deleteAllTasks);
+  .get(authController.protect, taskController.getAllUserTasks)
+  .post(authController.protect, taskController.createTask)
+  .delete(authController.protect, taskController.deleteAllTasks);
 
 router
   .route("/:id")
-  .get(taskController.getTask)
-  .delete(taskController.deleteOneTask);
+  .get(authController.protect, taskController.getTask)
+  .delete(authController.protect, taskController.deleteOneTask)
+  .patch(authController.protect, taskController.updateTask);
 
 module.exports = router;
