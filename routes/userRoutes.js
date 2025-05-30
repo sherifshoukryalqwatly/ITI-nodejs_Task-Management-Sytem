@@ -6,6 +6,12 @@ const router = express.Router();
 router.post("/login", authController.login);
 router.post("/signup", authController.signUp);
 
-router.route("/all").get(userController.getAllUsers);
+router
+  .route("/all")
+  .get(
+    authController.protect,
+    authController.restrictTo("admin"),
+    userController.getAllUsers
+  );
 
 module.exports = router;

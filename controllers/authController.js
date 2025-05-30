@@ -70,3 +70,17 @@ exports.protect = async function (req, res, next) {
     res.status(401).json({ status: "failed", err });
   }
 };
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    // roles ['admin', 'lead-guide']. role='user'
+    if (!roles.includes(req.user.role)) {
+      res.status(403).json({
+        status: "failed",
+        message: "You do not have permission to perform this action",
+      });
+    }
+
+    next();
+  };
+};
