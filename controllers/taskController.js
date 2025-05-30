@@ -1,38 +1,67 @@
 const Task = require("../models/taskModel");
 
-exports.getAllTasks = function (req, res) {
-  res.send("getAllTasks");
-};
-
-exports.createTask = async function (req, res) {
-  // task info in req.body
+const getAllTasks = async (req, res)=> {
   try {
-    const newTask = await Task.create(req.body);
-    res.status(201).json({
-      status: "success",
-      data: newTask,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      status: "failed",
-      err,
-    });
+    const tasks = await Task.find();
+    res.json(tasks);
+  } catch (error) {
+    res.json({error})
   }
 };
 
-exports.updateTask = function (req, res) {
-  res.send("update task");
+const createTask = async (req, res)=> {
+  try {
+    const task = await Task.create(req.body);
+    res.json(task);
+  } catch (error) {
+    res.json({error});
+  }
 };
 
-exports.deleteAllTasks = function (req, res) {
-  res.send("delete all tasks");
+const updateTask =async (req, res)=> {
+  try {
+    const {id} = req.params;
+    const task = await Task.findOneAndUpdate(id,req.body,{new:true,runValidators:true});
+    res.json(task);
+  } catch (error) {
+    res.json({error});
+  }
 };
 
-exports.deleteOneTask = function (req, res) {
-  res.send("delete one tasks");
+const deleteAllTasks = async (req, res)=> {
+  try {
+    const data = await Task.deleteMany({});
+    res.json(data);
+    } catch (error) {
+    res.json({error});
+  }
 };
 
-exports.getTask = function (req, res) {
-  res.send("get task");
+const deleteOneTask = async (req, res)=> {
+  try {
+    const {id} = req.params;
+    const data = await Task.deleteOne({_id:id});
+    res.json(data);
+  } catch (error) {
+    res.json({error});
+  }
 };
+
+const getTask = async (req, res)=> {
+  try {
+    const {id} = req.params;
+    const task = await Task.findOne({_id:id});
+    res.json(task);
+  } catch (error) {
+    res.json({error});
+  }
+};
+
+module.exports = {
+  getAllTasks,
+  getTask,
+  createTask,
+  updateTask,
+  deleteAllTasks,
+  deleteOneTask
+}
