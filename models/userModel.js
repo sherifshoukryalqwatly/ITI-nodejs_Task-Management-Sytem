@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
     default: "user",
   },
 });
-//dont forget to remove colleceiotn name
+
 const User = mongoose.model("User", userSchema,"mangmentSystemUsers");
 
 module.exports = User;
