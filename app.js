@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-
+const cors = require("cors");
 const userRouter = require("./routes/userRoutes");
 const taskRouter = require("./routes/taskRoutes");
 
@@ -12,11 +12,11 @@ const app = express();
 // general middleware
 app.use(express.json()); // parse request body
 app.use(morgan("dev")); // log info about request
+app.use(cors());
 
 // connect to database
 const DB_LOCAL = process.env.DB_LOCAL;
 const DB = process.env.DB;
-console.log(DB);
 mongoose
   // .connect(DB_LOCAL)
   .connect(DB)
