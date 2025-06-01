@@ -7,8 +7,33 @@ const signToken = function (id) {
 };
 
 exports.login = async (req, res) => {
-  const { userName, password } = req.body;
-  res.send("login page");
+  try {
+    const { userName, password } = req?.body;
+    if (!userName || !password) {
+      res.status(400).json({
+        status: "faield",
+        message: "please provide valid userName and password",
+      });
+    }
+    const user = await User.findOne({ userName: userName });
+    const isCorrectPassword = await user?.isCorrectPassword(
+      password,
+      user.password
+    );
+    if (!user || !isCorrectPassword) {
+      res.status(400).json({
+        status: "failed",
+        message: "incorrect userName or password",
+      });
+    }
+
+    // if everythig ok, send token
+    const token = signToken(user._id);
+    res.status(200).json({
+      status: "success",
+      token,
+    });
+  } catch (err) {}
 };
 
 //registration
