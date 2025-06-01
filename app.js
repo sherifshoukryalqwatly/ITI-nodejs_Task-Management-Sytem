@@ -15,8 +15,11 @@ app.use(morgan("dev")); // log info about request
 
 // connect to database
 const DB_LOCAL = process.env.DB_LOCAL;
+const DB = process.env.DB;
+console.log(DB);
 mongoose
-  .connect(DB_LOCAL)
+  // .connect(DB_LOCAL)
+  .connect(DB)
   .then(() => {
     console.log("connected to db successful");
   })

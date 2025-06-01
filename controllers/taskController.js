@@ -1,6 +1,5 @@
 const Task = require("../models/taskModel");
 const User = require("../models/userModel");
-const { options } = require("../routes/userRoutes");
 
 const getAllUserTasks = async (req, res) => {
   try {
