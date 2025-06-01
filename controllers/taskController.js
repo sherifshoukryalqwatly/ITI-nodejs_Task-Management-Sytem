@@ -2,7 +2,35 @@ const Task = require("../models/taskModel");
 
 const getAllUserTasks = async (req, res) => {
   try {
-    const tasks = await Task.find({ userID: req.user._id });
+    //filter
+    const queryObj = { ...req.query };
+    const exculededFields = ["page", "sort", "limit", "fields"];
+    exculededFields.forEach((el) => delete queryObj[el]);
+    queryObj.userID = req.user._id;
+    let query = Task.find(queryObj);
+
+    // sort
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(",").join(" ");
+      console.log(sortBy);
+      query = query.sort(sortBy);
+    }
+
+    // fields (projection)
+    if (req.query.fields) {
+      const fields = req.query.fields.split(",").join(" ");
+      query = query.select(fields);
+    }
+
+    //pagination
+    if (req.query.page) {
+      const pageNum = +req.query.page;
+      const resPerPage = +req.query.limit || 3;
+      query = query.skip((pageNum - 1) * resPerPage).limit(resPerPage);
+    }
+
+    //execute query
+    const tasks = await query;
     res.json({
       status: "success",
       results: tasks.length,
@@ -24,7 +52,7 @@ const createTask = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       status: "failed",
-      err,
+      error,
     });
   }
 };

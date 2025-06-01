@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
     maxlength: 150,
     required: true,
   },
+  category: {
+    type: String,
+    default: "software",
+  },
   role: {
     type: String,
     enum: ["admin", "user"],
