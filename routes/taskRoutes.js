@@ -8,6 +8,7 @@ router
   .post(authController.protect, taskController.createTask)
   .delete(authController.protect, taskController.deleteAllTasks);
 
+router.route("/search").get(authController.protect, taskController.searchTasks);
 router
   .route("/:id")
   .get(authController.protect, taskController.getTask)

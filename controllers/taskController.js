@@ -1,4 +1,6 @@
 const Task = require("../models/taskModel");
+const User = require("../models/userModel");
+const { options } = require("../routes/userRoutes");
 
 const getAllUserTasks = async (req, res) => {
   try {
@@ -110,6 +112,37 @@ const getTask = async (req, res) => {
   }
 };
 
+const searchTasks = async (req, res) => {
+  try {
+    const { title, description, category } = req?.query;
+    const query = {};
+    if (title) {
+      query.title = { $regex: new RegExp(title, "i") };
+    }
+
+    if (description) {
+      query.description = { $regex: new RegExp(description, "i") };
+    }
+    if (category) {
+      query.category = { $regex: new RegExp(category, "i") };
+    }
+
+    query.userID = req.user._id;
+    const tasks = await Task.find(query);
+    res.status(200).json({
+      status: "success",
+      results: tasks.length,
+      data: tasks,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      status: "failed",
+      err,
+    });
+  }
+};
+
 module.exports = {
   getAllUserTasks,
   getTask,
@@ -117,4 +150,5 @@ module.exports = {
   updateTask,
   deleteAllTasks,
   deleteOneTask,
+  searchTasks,
 };
