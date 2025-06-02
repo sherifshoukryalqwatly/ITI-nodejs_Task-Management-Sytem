@@ -18,33 +18,46 @@ const getAllUsers = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.user._id;
     const user = await User.findOneAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
     });
-    res.json(user);
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
   } catch (error) {
-    res.json({ error });
+    res.status(400).json({
+      status: "failed",
+      error,
+    });
   }
 };
 
 const deleteUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const data = await User.deleteOne({ _id: id });
-    res.json(data);
+    const id = req.user._id;
+    await User.deleteOne({ _id: id });
+    res.status(204).json({
+      status: "success",
+    });
   } catch (error) {
+    console.log("err");
     res.json({ error });
   }
 };
 
 const deleteAllUsers = async () => {
   try {
-    const data = await User.deleteMany({});
-    res.json(data);
+    await User.deleteMany({});
+    res.status(204).json({
+      status: "success",
+    });
   } catch (error) {
-    res.json(error);
+    res.status(400).json({
+      status: "failed",
+    });
   }
 };
 
