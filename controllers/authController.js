@@ -15,6 +15,7 @@ exports.login = async (req, res) => {
         message: "please provide valid userName and password",
       });
     }
+    // res.send("ok");
     const user = await User.findOne({ userName: userName });
     const isCorrectPassword = await user?.isCorrectPassword(
       password,
@@ -33,7 +34,13 @@ exports.login = async (req, res) => {
       status: "success",
       token,
     });
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      status: "failed",
+      err,
+    });
+  }
 };
 
 //registration

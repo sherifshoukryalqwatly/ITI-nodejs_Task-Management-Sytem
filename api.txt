@@ -1,15 +1,20 @@
 Action                      http method                    routes
 
-
-get tasks for user           get                           /task
-create task                  post                          /task
-update task                  patch                         /task
-delete all tasks             delete                        /task
-delete task by id            delete                        /task/:id
-get specfic task             get                           /task/:id
-
-
 login                       post                           users/login
 signup                      post                           users/signup
+
+get tasks for user           get                           /tasks
+create task                  post                          /tasks
+update task                  patch                         /tasks
+delete all tasks             delete                        /tasks
+delete task by id            delete                        /tasks/:id
+get specfic task             get                           /tasks/:id
+
+get all users               get                             /users/all
+delete all users            delete                          /users/all
+delete user                 delete                          /users
+update user                 patch                           /users
+
+
 
 
