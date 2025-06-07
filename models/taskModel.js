@@ -30,6 +30,12 @@ const taskSchema = new mongoose.Schema({
   },
 });
 
+// create index on fields
+taskSchema.index({ title: 1 });
+taskSchema.index({ description: 1 });
+taskSchema.index({ category: 1 });
+taskSchema.index({ priority: 1 });
+
 taskSchema.pre(/^find/, function (next) {
   this.populate({
     path: "userID",
