@@ -6,8 +6,11 @@ const cors = require("cors");
 const userRouter = require("./routes/userRoutes");
 const taskRouter = require("./routes/taskRoutes");
 
-dotenv.config({ path: "config.env" });
+dotenv.config('dotenv');
 const app = express();
+
+const swaggerUi = require('swagger-ui-express');
+const specs = require('./swagger.js');
 
 // general middleware
 app.use(express.json()); // parse request body
@@ -27,6 +30,8 @@ mongoose
     console.log("error while connected to db");
     console.log(err);
   });
+
+app.use('/api-doc',swaggerUi.serve,swaggerUi.setup(specs));
 
 // routes
 app.use("/users", userRouter);
