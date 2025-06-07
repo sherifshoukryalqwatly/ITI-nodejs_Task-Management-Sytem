@@ -86,4 +86,6 @@ Follow these steps to set up TaskMaster locally:
    - Update user details with `PATCH /users`.
    - Delete a user account with `DELETE /users`.
    - Admins can retrieve all users with `GET /users/all` or delete all users with `DELETE /users/all`.
+  
+   - ## Swagger URL : http://localhost:3000/api-doc/#/
 
